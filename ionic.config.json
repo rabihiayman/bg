@@ -1,0 +1,7 @@
+{
+  "name": "bg",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
