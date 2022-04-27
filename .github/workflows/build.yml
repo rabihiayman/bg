@@ -38,21 +38,35 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: "trivy-results.sarif"
-  test:
-    name: Test
-    runs-on: ubuntu-18.04
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      # Checkout the Repo
-      - uses: actions/checkout@v2
-
-      # Install Node 12
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - name: Cloning repo
+        uses: actions/checkout@v2
         with:
-          node-version: 12
+          fetch-depth: 0
 
-      # Install dependencies
-      - run: npm install
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: "ssh://dokku@dokku.me:22/appname"
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Run tests
-      - run: npm test
+  # #test:
+  #   #name: Test
+  #   #runs-on: ubuntu-18.04
+  #  # steps:
+  #     # Checkout the Repo
+  #     #- uses: actions/checkout@v2
+
+  #     # Install Node 12
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+
+  #     # Install dependencies
+  #     - run: npm install
+
+  #     # Run tests
+  #     - run: npm test
